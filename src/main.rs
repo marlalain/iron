@@ -22,9 +22,15 @@ fn main() {
                     eprintln!("{}", e);
                 }
             }
+            "exit" => return,
             command => {
-                let mut child = Command::new(command).args(parts).spawn().unwrap();
-                child.wait();
+                let child = Command::new(command).args(parts).spawn();
+                match child {
+                    Ok(mut child) => {
+                        child.wait();
+                    }
+                    Err(e) => eprintln!("{}", e),
+                };
             }
         }
     }
